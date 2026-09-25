@@ -1,0 +1,56 @@
+---
+import { social, profile } from '../lib/content';
+import Icon from './Icon.astro';
+
+const links = social.sosial.filter((s) => s.url);
+---
+
+<ul class="bar" aria-label="Tautan media sosial">
+  {
+    links.map((s) => (
+      <li>
+        <a href={s.url} target="_blank" rel="noopener noreferrer me" title={s.nama}>
+          <Icon name={s.platform} size={18} />
+          <span class="visually-hidden">{s.nama}</span>
+        </a>
+      </li>
+    ))
+  }
+  {
+    profile.kontak.email && (
+      <li>
+        <a href={`mailto:${profile.kontak.email}`} title="Email">
+          <Icon name="mail" size={18} />
+          <span class="visually-hidden">Email</span>
+        </a>
+      </li>
+    )
+  }
+</ul>
+
+<style>
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .bar a {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--muted);
+    transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .bar a:hover {
+    color: var(--text);
+    border-color: var(--text);
+    transform: translateY(-2px);
+  }
+</style>

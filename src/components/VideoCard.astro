@@ -1,0 +1,156 @@
+---
+import type { Video } from '../lib/data';
+import { formatTanggal } from '../lib/data';
+import Icon from './Icon.astro';
+
+interface Props {
+  video: Video;
+  eager?: boolean;
+  index?: number;
+}
+const { video, eager = false, index = 0 } = Astro.props;
+const fallback = `https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`;
+const initial = `https://i.ytimg.com/vi/${video.videoId}/maxresdefault.jpg`;
+---
+
+<article class="vcard">
+  <a
+    class="vcard__media"
+    href={video.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    <img
+      src={initial}
+      srcset={`${fallback} 320w, ${initial} 1280w`}
+      sizes="(min-width: 62rem) 25vw, (min-width: 40rem) 45vw, 90vw"
+      alt=""
+      width="1280"
+      height="720"
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      fetchpriority={eager ? 'high' : 'auto'}
+      onerror={`this.onerror=null;this.srcset='';this.src='${fallback}'`}
+    />
+    <span class="vcard__play" aria-hidden="true"><Icon name="play" size={18} /></span>
+    {video.short && <span class="vcard__tag readout">SHORT</span>}
+    <span class="vcard__idx readout">{String(index + 1).padStart(2, '0')}</span>
+  </a>
+
+  <div class="vcard__body">
+    <h3 class="vcard__judul">
+      <a href={video.url} target="_blank" rel="noopener noreferrer">{video.title}</a>
+    </h3>
+    <p class="vcard__meta readout">
+      <time datetime={video.published}>{formatTanggal(video.published)}</time>
+    </p>
+  </div>
+</article>
+
+<style>
+  .vcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .vcard:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-pop);
+  }
+
+  .vcard__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    background: var(--panel);
+    overflow: hidden;
+  }
+  .vcard__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+  .vcard:hover .vcard__media img {
+    transform: scale(1.035);
+  }
+
+  .vcard__play {
+    position: absolute;
+    inset: auto auto 0.6rem 0.6rem;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: rgb(21 17 12 / 0.78);
+    color: var(--accent);
+    backdrop-filter: blur(4px);
+    transition: background-color 0.18s ease;
+  }
+  .vcard:hover .vcard__play {
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  .vcard__tag,
+  .vcard__idx {
+    position: absolute;
+    top: 0.6rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    background: rgb(21 17 12 / 0.82);
+    color: var(--on-panel);
+    letter-spacing: 0.08em;
+    font-size: 0.65rem;
+  }
+  .vcard__tag {
+    right: 0.6rem;
+    background: var(--accent);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .vcard__idx {
+    left: 0.6rem;
+    color: var(--on-panel-muted);
+  }
+
+  .vcard__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.9rem 1rem 1.1rem;
+    flex: 1;
+  }
+  .vcard__judul {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .vcard__judul a {
+    display: block;
+    padding-block: 4px;
+    text-decoration: none;
+  }
+  .vcard__judul a:hover {
+    color: var(--accent-ink);
+  }
+  .vcard__meta {
+    margin-top: auto;
+    color: var(--muted-2);
+    letter-spacing: 0.05em;
+  }
+</style>

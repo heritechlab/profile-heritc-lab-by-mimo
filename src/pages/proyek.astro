@@ -1,0 +1,151 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import RepoCard from '../components/RepoCard.astro';
+import { loadGenerated } from '../lib/data';
+import { githubConfig } from '../lib/content';
+
+const { github } = await loadGenerated();
+
+const override = githubConfig.override;
+const pinned = new Set<string>(githubConfig.pinned);
+const sembunyikan = new Set<string>(githubConfig.sembunyikan);
+
+const repos = github.repos
+  .filter((r) => !sembunyikan.has(r.name))
+  .filter((r) => (githubConfig.mode === 'semua' ? true : pinned.has(r.name)))
+  .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt));
+
+const bahasa = [...new Set(repos.map((r) => r.language || r.topics[0] || 'Lainnya'))].filter(
+  Boolean,
+) as string[];
+
+const totalStars = repos.reduce((n, r) => n + r.stars, 0);
+---
+
+<Base
+  title="Proyek"
+  description="Kumpulan proyek GitHub pilihan Heri Tc Lab — monitoring PLTS dengan Modbus, frontend layanan hosting, dan aplikasi institusi."
+>
+  <PageHead
+    label="Proyek"
+    title="Repo pilihan dan apa hasilnya"
+    lead={`${repos.length} repo ditampilkan${totalStars ? ` · ${totalStars} bintang` : ''}. Semua ditarik dari GitHub saat build, jadi metadata selalu terbaru.`}
+  />
+
+  <section class="section">
+    <div class="wrap">
+      {
+        repos.length > 0 ? (
+          <>
+            <div class="filter" role="group" aria-label="Saring berdasarkan teknologi">
+              <button class="filter__btn is-on" type="button" data-filter="*">Semua</button>
+              {bahasa.map((b) => (
+                <button class="filter__btn" type="button" data-filter={b.toLowerCase()}>
+                  {b}
+                </button>
+              ))}
+            </div>
+
+            <p class="filter__hasil readout" data-hasil role="status" aria-live="polite">
+              {repos.length} proyek
+            </p>
+
+            <div class="grid" data-grid>
+              {repos.map((r, i) => (
+                <RepoCard repo={r} peran={override[r.name]?.peran} hasil={override[r.name]?.hasil} showIndex index={i} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <p class="kosong">
+            Belum ada data repo. Jalankan <code>npm run fetch</code> lalu build ulang.
+          </p>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .filter__btn {
+    padding: 0.45rem 0.95rem;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .filter__btn:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+  .filter__btn.is-on {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--on-panel);
+  }
+
+  .filter__hasil {
+    margin: 1rem 0 1.1rem;
+    color: var(--muted-2);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
+
+  .grid {
+    display: grid;
+    gap: clamp(0.85rem, 2vw, 1.25rem);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+
+  .kosong {
+    padding: 2rem;
+    background: var(--surface);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--muted);
+  }
+  .kosong code {
+    font-family: var(--font-mono);
+    background: var(--paper);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+  }
+</style>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-grid] > .repo');
+  const hasil = document.querySelector<HTMLElement>('[data-hasil]');
+
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter ?? '*';
+      btns.forEach((b) => b.classList.toggle('is-on', b === btn));
+
+      let n = 0;
+      cards.forEach((card) => {
+        const cocok =
+          f === '*' ||
+          card.dataset.bahasa === f ||
+          (card.dataset.topik ?? '').split(' ').includes(f);
+        card.hidden = !cocok;
+        if (cocok) n += 1;
+      });
+
+      if (hasil) hasil.textContent = `${n} proyek`;
+    });
+  });
+</script>

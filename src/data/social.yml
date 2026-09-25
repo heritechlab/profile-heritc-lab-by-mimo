@@ -1,0 +1,46 @@
+# =====================================================================
+# Kanal & media sosial (F-04) — satu file, tanpa ubah komponen.
+# `utama: true` membuat tombol ikut tampil di hero.
+# Kosongkan daftar bila belum siap; komponen otomatis menyembunyikan.
+# =====================================================================
+
+youtube:
+  handle: "@HeriTcLab"
+  channelId: "UCVz6ffh27Lj7OgArOLxz_lg"
+  url: "https://www.youtube.com/@HeriTcLab"
+  nama: "Heri Tc Lab"
+
+github:
+  username: "heritechlab"
+  url: "https://github.com/heritechlab"
+
+# Tautan sosial — isi URL yang sudah dipublikasikan.
+# platform dipakai untuk memilih ikon: youtube, github, instagram, tiktok,
+# facebook, x, linkedin, telegram, whatsapp, email, website, threads.
+sosial:
+  - platform: youtube
+    nama: "YouTube"
+    url: "https://www.youtube.com/@HeriTcLab"
+    utama: true
+  - platform: github
+    nama: "GitHub"
+    url: "https://github.com/heritechlab"
+    utama: true
+  - platform: instagram
+    nama: "Instagram"
+    url: ""
+  - platform: tiktok
+    nama: "TikTok"
+    url: ""
+  - platform: facebook
+    nama: "Facebook"
+    url: ""
+  - platform: x
+    nama: "X"
+    url: ""
+  - platform: linkedin
+    nama: "LinkedIn"
+    url: ""
+  - platform: threads
+    nama: "Threads"
+    url: ""

@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import { nav } from '../lib/site';
+---
+
+<Base title="Halaman tidak ditemukan" description="Halaman yang Anda cari tidak ada." noIndex>
+  <section class="nf">
+    <div class="wrap nf__inner">
+      <p class="nf__kode readout">404</p>
+      <h1 class="nf__judul">Halaman ini tidak ada</h1>
+      <p class="nf__teks">
+        Tautan yang Anda buka sudah dipindahkan atau salah ketik. Coba mulai dari beranda.
+      </p>
+      <div class="nf__aksi">
+        <a class="btn btn--primary" href="/">Ke beranda</a>
+        <a class="btn btn--ghost" href="/kontak">Hubungi saya</a>
+      </div>
+      <nav class="nf__nav" aria-label="Navigasi halaman">
+        <ul>
+          {nav.map((i) => <li><a href={i.href}>{i.label}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    background: var(--ink);
+    color: var(--on-panel);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(3rem, 9vw, 6rem);
+    border-bottom: 3px solid var(--accent);
+  }
+  .nf__kode {
+    color: var(--accent);
+    font-size: var(--text-sm);
+    letter-spacing: 0.2em;
+  }
+  .nf__judul {
+    margin-top: 0.75rem;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+  .nf__teks {
+    margin-top: 0.9rem;
+    max-width: 46ch;
+    color: var(--on-panel-muted);
+  }
+  .nf__aksi {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .nf__aksi .btn--ghost {
+    color: var(--on-panel);
+    border-color: var(--panel-line);
+  }
+  .nf__aksi .btn--ghost:hover {
+    background: rgb(255 255 255 / 0.06);
+    border-color: var(--on-panel);
+  }
+  .nf__nav {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--panel-line);
+  }
+  .nf__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nf__nav a {
+    color: var(--on-panel-muted);
+    font-size: var(--text-sm);
+    text-decoration: none;
+  }
+  .nf__nav a:hover {
+    color: var(--accent);
+  }
+</style>

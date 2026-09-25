@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import ChannelBar from '../components/ChannelBar.astro';
+import VideoCard from '../components/VideoCard.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { loadGenerated } from '../lib/data';
+
+const { youtube } = await loadGenerated();
+const videos = youtube.videos;
+const longs = videos.filter((v) => !v.short);
+const shorts = videos.filter((v) => v.short);
+---
+
+<Base
+  title="Kanal YouTube"
+  description={`Video terbaru dari ${youtube.nama} (${youtube.handle}) — PLTS, inverter hybrid, panel surya, dan catatan teknis lapangan.`}
+>
+  <PageHead
+    label="Kanal"
+    title="Heri Tc Lab di YouTube"
+    lead="Catatan lapangan seputar PLTS, inverter, dan elektrikal rumahan. Daftar video ini ditarik dari feed kanal setiap kali situs dibangun."
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <ChannelBar
+        url={youtube.url}
+        nama={youtube.nama}
+        handle={youtube.handle}
+        subscriberCount={youtube.subscriberCount}
+        videoCount={videos.length}
+        stale={youtube.stale}
+      />
+
+      {
+        longs.length > 0 ? (
+          <>
+            <div class="blok-judul">
+              <h2 class="blok-judul__t">Video terbaru</h2>
+              <p class="blok-judul__n readout">{longs.length} video</p>
+            </div>
+            <div class="grid">
+              {longs.map((v, i) => (
+                <VideoCard video={v} index={i} eager={i < 3} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <p class="kosong">
+            Belum ada data video. Jalankan <code>npm run fetch</code> lalu build ulang.
+          </p>
+        )
+      }
+
+      {
+        shorts.length > 0 && (
+          <>
+            <div class="blok-judul">
+              <h2 class="blok-judul__t">Shorts</h2>
+              <p class="blok-judul__n readout">{shorts.length} video</p>
+            </div>
+            <div class="grid grid--short">
+              {shorts.map((v, i) => (
+                <VideoCard video={v} index={i} />
+              ))}
+            </div>
+          </>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        label="Tentang kanal"
+        title="Siapa di balik kanal"
+        lead="Kanal ini tempat saya membagikan hasil nyata di lapangan: instalasi panel surya, uji inverter hybrid, monitoring Modbus, dan ulasan komponen elektrikal — tanpa banyak polesan."
+        href="/kontak"
+        linkLabel="Ajak kolaborasi"
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .blok-judul {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .blok-judul__t {
+    font-size: var(--text-xl);
+  }
+  .blok-judul__n {
+    color: var(--muted-2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
+
+  .grid {
+    display: grid;
+    gap: clamp(0.85rem, 2vw, 1.25rem);
+    margin-top: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  }
+  .grid--short {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
+  }
+
+  .kosong {
+    margin-top: 1.5rem;
+    padding: 2rem;
+    background: var(--surface);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--muted);
+  }
+  .kosong code {
+    font-family: var(--font-mono);
+    background: var(--paper);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+  }
+</style>

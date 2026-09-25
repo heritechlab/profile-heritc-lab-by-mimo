@@ -1,0 +1,28 @@
+# =====================================================================
+# Repo GitHub (F-02).
+# Mode:
+#   mode: unggulan  -> hanya repo di daftar `pinned` yang tampil.
+#   mode: semua     -> semua repo non-fork/non-arsip, urut aktivitas.
+# `sembunyikan` selalu dikeluarkan, apa pun mode-nya.
+# =====================================================================
+
+mode: unggulan
+pinned:
+  - monitor-plts-via-modbus
+  - hostidmurah-web
+  - spmi-basok
+sembunyikan: []
+
+# Deskripsi & tech tambahan per repo (meng-override data API bila diisi).
+override:
+  monitor-plts-via-modbus:
+    peran: "Perancangan & pengembangan"
+    hasil: "Monitoring PLTS rumahan local-first, gateway Modbus RTU → dashboard web."
+  hostidmurah-web:
+    peran: "Lead frontend"
+    hasil: "Frontend utama layanan hosting dengan katalog produk dan alur order."
+  spmi-basok:
+    peran: "Developer"
+    hasil: "Aplikasi Sistem Penjaminan Mutu Internal untuk LPM basok."
+
+label: "Repo"

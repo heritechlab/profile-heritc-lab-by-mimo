@@ -1,0 +1,298 @@
+/* ============================================================
+   Token desain — Heri Tc Lab
+   Bahasa visual: panel instrumen. Gelap hangat di hero,
+   terang sejuk di badan, satu aksen amber (matahari/DC).
+   ============================================================ */
+
+:root {
+  /* permukaan */
+  --paper: #f2f4f3;
+  --surface: #ffffff;
+  --surface-2: #e9ecea;
+  --line: #dde1de;
+  --line-strong: #c2c8c4;
+
+  /* teks */
+  --text: #131a1f;
+  --muted: #5a666e;
+  --muted-2: #616b73;
+
+  /* panel gelap */
+  --ink: #15110c;
+  --panel: #1d1813;
+  --panel-2: #27211a;
+  --panel-line: #3a322a;
+  --on-panel: #f6f2ec;
+  --on-panel-muted: #a79e93;
+
+  /* aksen */
+  --accent: #f2a20c;
+  --accent-hover: #ffbc3f;
+  --accent-ink: #8a5b00;
+  --accent-wash: #fff4dd;
+  --live: #3ea776;
+  --live-ink: #1f7a52;
+
+  /* tipografi */
+  --font-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Instrument Sans Variable', 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.4rem, 2.6vw, 1.85rem);
+  --text-2xl: clamp(1.85rem, 4.2vw, 2.9rem);
+  --text-display: clamp(2.6rem, 8.5vw, 6.25rem);
+
+  /* ruang & bentuk */
+  --gutter: clamp(1.15rem, 4vw, 2.5rem);
+  --max: 74rem;
+  --radius: 4px;
+  --radius-lg: 8px;
+  --section-y: clamp(3.5rem, 9vw, 6.5rem);
+
+  --shadow-card: 0 1px 2px rgb(19 26 31 / 0.05), 0 8px 24px -16px rgb(19 26 31 / 0.25);
+  --shadow-pop: 0 2px 4px rgb(19 26 31 / 0.06), 0 18px 40px -24px rgb(19 26 31 / 0.4);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------- utilitas */
+.wrap {
+  width: min(100% - var(--gutter) * 2, var(--max));
+  margin-inline: auto;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--accent);
+  color: var(--ink);
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* label teknis kecil — hanya untuk data terukur, bukan eyebrow dekoratif */
+.readout {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------- tombol */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.35rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease,
+    transform 0.16s ease;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--primary {
+  background: var(--accent);
+  color: var(--ink);
+  border-color: var(--accent);
+}
+.btn--primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+.btn--ghost:hover {
+  border-color: var(--text);
+  background: var(--surface);
+}
+.btn--on-panel {
+  background: transparent;
+  color: var(--on-panel);
+  border-color: var(--panel-line);
+}
+.btn--on-panel:hover {
+  border-color: var(--on-panel);
+  background: rgb(255 255 255 / 0.06);
+}
+
+/* ---------------------------------------------------- seksi */
+.section {
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--line);
+}
+.section:first-of-type {
+  border-top: 0;
+}
+
+.section__head {
+  display: grid;
+  gap: 0.4rem 2.5rem;
+  margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+}
+@media (min-width: 48rem) {
+  .section__head {
+    grid-template-columns: 12rem 1fr;
+    align-items: baseline;
+  }
+}
+.section__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--accent-ink);
+  padding-top: 0.35rem;
+}
+.section__title {
+  font-size: var(--text-2xl);
+}
+.section__lead {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  max-width: 58ch;
+  font-size: var(--text-lg);
+  line-height: 1.55;
+}
+@media (min-width: 48rem) {
+  .section__lead {
+    grid-column: 2;
+  }
+}
+
+/* ---------------------------------------------------- kartu bersama */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------- gerak */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

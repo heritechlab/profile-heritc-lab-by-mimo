@@ -1,0 +1,226 @@
+---
+import { nav, siteMeta } from '../lib/site';
+import Icon from './Icon.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHome = path === '';
+const active = (href: string) => (isHome ? false : path === href.replace(/\/$/, ''));
+---
+
+<header class="masthead">
+  <div class="wrap masthead__inner">
+    <a class="mark" href="/" aria-label={`${siteMeta.name} — beranda`}>
+      <span class="mark__glyph" aria-hidden="true">HTL</span>
+      <span class="mark__text">
+        <strong>Heri Tc Lab</strong>
+        <span class="mark__sub readout">JAMBI · ID</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Navigasi utama">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={active(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="btn btn--primary masthead__cta" href="/kontak">
+      <Icon name="mail" size={15} />
+      Hubungi
+    </a>
+
+    <button
+      class="burger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menu-mobil"
+      data-menu-toggle
+    >
+      <span class="visually-hidden">Buka menu</span>
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+        <path data-l="1" d="M2 6h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+        <path data-l="2" d="M2 14h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="menu" id="menu-mobil" data-menu hidden>
+    <ul>
+      {
+        nav.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</header>
+
+<style>
+  .masthead {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--ink);
+    color: var(--on-panel);
+    border-bottom: 1px solid var(--panel-line);
+  }
+
+  .masthead__inner {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 3vw, 2rem);
+    min-height: 4rem;
+  }
+
+  .mark {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    margin-right: auto;
+  }
+  .mark__glyph {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    background: var(--accent);
+    color: var(--ink);
+    border-radius: 3px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+  }
+  .mark__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+  .mark__text strong {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .mark__sub {
+    color: var(--on-panel-muted);
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: clamp(0.9rem, 2.4vw, 1.75rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav a {
+    position: relative;
+    display: block;
+    padding: 0.35rem 0;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--on-panel-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .nav a:hover {
+    color: var(--on-panel);
+  }
+  .nav a[aria-current='page'] {
+    color: var(--on-panel);
+  }
+  .nav a[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.15rem;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .masthead__cta {
+    padding: 0.55rem 1rem;
+  }
+
+  .burger {
+    display: none;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: transparent;
+    border: 1px solid var(--panel-line);
+    border-radius: var(--radius);
+    color: var(--on-panel);
+    cursor: pointer;
+  }
+
+  .menu {
+    border-top: 1px solid var(--panel-line);
+    background: var(--ink);
+    padding: 0.5rem var(--gutter) 1.1rem;
+  }
+  .menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .menu a {
+    display: block;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--panel-line);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .menu li:last-child a {
+    border-bottom: 0;
+  }
+
+  @media (max-width: 56rem) {
+    .nav,
+    .masthead__cta {
+      display: none;
+    }
+    .burger {
+      display: grid;
+    }
+  }
+  @media (min-width: 56.001rem) {
+    .menu {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  toggle?.addEventListener('click', () => {
+    if (!menu) return;
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    menu.hidden = open;
+    toggle.querySelector('.visually-hidden')!.textContent = open ? 'Buka menu' : 'Tutup menu';
+    const [a, b] = toggle.querySelectorAll<SVGPathElement>('path');
+    if (open) {
+      a.setAttribute('d', 'M2 6h16');
+      b.setAttribute('d', 'M2 14h16');
+    } else {
+      a.setAttribute('d', 'M5 5l10 10');
+      b.setAttribute('d', 'M15 5L5 15');
+    }
+  });
+</script>

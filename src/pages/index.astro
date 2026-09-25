@@ -1,0 +1,309 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import SkillGrid from '../components/SkillGrid.astro';
+import VideoCard from '../components/VideoCard.astro';
+import RepoCard from '../components/RepoCard.astro';
+import WebsiteCard from '../components/WebsiteCard.astro';
+import ChannelBar from '../components/ChannelBar.astro';
+import ContactSection from '../components/ContactSection.astro';
+import SocialBar from '../components/SocialBar.astro';
+import { loadGenerated } from '../lib/data';
+import { profile, websites, githubConfig } from '../lib/content';
+
+const { youtube, github } = await loadGenerated();
+
+const override = githubConfig.override;
+const pinned = new Set<string>(githubConfig.pinned);
+const sembunyikan = new Set<string>(githubConfig.sembunyikan);
+
+const repos = github.repos
+  .filter((r) => !sembunyikan.has(r.name))
+  .filter((r) => (githubConfig.mode === 'semua' ? true : pinned.has(r.name)))
+  .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt));
+
+const videos = youtube.videos;
+const videoUtama = videos.slice(0, 4);
+const videoSisa = videos.length - videoUtama.length;
+---
+
+<Base>
+  <Hero youtube={youtube} repos={github.repos} />
+
+  <!-- ---------------------------------------------------------- Tentang -->
+  <section class="section" id="tentang" aria-labelledby="h-tentang">
+    <div class="wrap">
+      <SectionHead
+        label="Tentang"
+        title="Dari rak jaringan sampai rilis aplikasi"
+        lead={profile.bioLanjutan}
+        href="/tentang"
+        linkLabel="Profil lengkap"
+      />
+
+      <div class="split">
+        <div class="split__aside">
+          <dl class="fakta">
+            <div>
+              <dt class="readout">Nama</dt>
+              <dd>{profile.nama}</dd>
+            </div>
+            <div>
+              <dt class="readout">Dikenal sebagai</dt>
+              <dd>{profile.namaSosial}</dd>
+            </div>
+            <div>
+              <dt class="readout">Lokasi</dt>
+              <dd>{profile.lokasi}</dd>
+            </div>
+            <div>
+              <dt class="readout">Bahasa</dt>
+              <dd>{profile.bahasa.join(' · ')}</dd>
+            </div>
+          </dl>
+
+          <div class="minat">
+            <p class="readout minat__label">Di luar jam kerja</p>
+            <ul>
+              {profile.minat.map((m) => <li class="chip">{m}</li>)}
+            </ul>
+          </div>
+        </div>
+
+        <div class="split__utama">
+          <SkillGrid compact />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- YouTube -->
+  <section class="section" id="kanal" aria-labelledby="h-kanal">
+    <div class="wrap">
+      <SectionHead
+        label="Kanal"
+        title="Video terbaru dari Heri Tc Lab"
+        lead="PLTS, inverter, panel surya, dan catatan teknis lapangan — tampil otomatis dari feed kanal."
+        href="/youtube"
+        linkLabel="Semua video"
+      />
+
+      <ChannelBar
+        url={youtube.url}
+        nama={youtube.nama}
+        handle={youtube.handle}
+        subscriberCount={youtube.subscriberCount}
+        videoCount={videos.length}
+        stale={youtube.stale}
+      />
+
+      {
+        videoUtama.length > 0 ? (
+          <div class="grid grid--video">
+            {videoUtama.map((v, i) => (
+              <VideoCard video={v} index={i} eager={i < 2} />
+            ))}
+          </div>
+        ) : (
+          <p class="kosong">Belum ada data video. Jalankan <code>npm run fetch</code> lalu build ulang.</p>
+        )
+      }
+
+      {
+        videos.length > 4 && (
+          <p class="lebih">
+            <a href="/youtube">
+              {videoSisa} video lainnya di feed
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M7 17 17 7M9 7h8v8" />
+              </svg>
+            </a>
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- Proyek -->
+  <section class="section" id="proyek" aria-labelledby="h-proyek">
+    <div class="wrap">
+      <SectionHead
+        label="Proyek"
+        title="Kode yang berjalan di produksi"
+        lead="Repo pilihan dari GitHub, lengkap dengan peran dan hasilnya."
+        href="/proyek"
+        linkLabel="Semua proyek"
+      />
+
+      {
+        repos.length > 0 ? (
+          <div class="grid grid--repo">
+            {repos.map((r, i) => (
+              <RepoCard repo={r} peran={override[r.name]?.peran} hasil={override[r.name]?.hasil} showIndex index={i} />
+            ))}
+          </div>
+        ) : (
+          <p class="kosong">Belum ada data repo. Jalankan <code>npm run fetch</code> lalu build ulang.</p>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- Situs -->
+  <section class="section" id="situs" aria-labelledby="h-situs">
+    <div class="wrap">
+      <SectionHead
+        label="Situs"
+        title="Website yang saya kelola"
+        lead="Dari situs kampus sampai produk SaaS — peran, stack, dan status tiap situs."
+        href="/website"
+        linkLabel="Detail tiap situs"
+      />
+
+      <div class="grid grid--site">
+        {websites.websites.map((w, i) => <WebsiteCard site={w} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- Kontak -->
+  <section class="section" id="kontak" aria-labelledby="h-kontak">
+    <div class="wrap">
+      <SectionHead
+        label="Kontak"
+        title="Mari bicarakan proyek Anda"
+        lead="Ceritakan kebutuhannya — jaringan, server, PLTS, atau web. Saya balas lewat kanal yang Anda pilih."
+      />
+      <ContactSection />
+    </div>
+  </section>
+
+  <section class="section section--akhir" aria-label="Media sosial">
+    <div class="wrap baris-akhir">
+      <p class="readout">Temukan saya di</p>
+      <SocialBar />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .split {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+  @media (min-width: 62rem) {
+    .split {
+      grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  .fakta {
+    display: grid;
+    gap: 1px;
+    margin: 0;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .fakta > div {
+    background: var(--surface);
+    padding: 0.8rem 1rem;
+  }
+  .fakta dt {
+    color: var(--muted-2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+  }
+  .fakta dd {
+    margin: 0.2rem 0 0;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    line-height: 1.4;
+  }
+
+  .minat {
+    margin-top: 1.25rem;
+  }
+  .minat__label {
+    color: var(--muted-2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    margin-bottom: 0.6rem;
+  }
+  .minat ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .grid {
+    display: grid;
+    gap: clamp(0.85rem, 2vw, 1.25rem);
+  }
+  .grid--video {
+    margin-top: clamp(1.25rem, 3vw, 1.75rem);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  }
+  .grid--repo {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  }
+  .grid--site {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  }
+
+  .lebih {
+    margin-top: 1.25rem;
+  }
+  .lebih a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--accent-ink);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .lebih a:hover {
+    border-bottom-color: currentColor;
+  }
+
+  .kosong {
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--muted);
+    font-size: var(--text-sm);
+  }
+  .kosong code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--paper);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+  }
+
+  .section--akhir {
+    padding-block: clamp(2rem, 5vw, 3rem);
+  }
+  .baris-akhir {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--muted-2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
+</style>

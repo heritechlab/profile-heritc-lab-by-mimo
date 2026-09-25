@@ -1,0 +1,51 @@
+---
+interface Props {
+  label: string;
+  title: string;
+  lead?: string;
+  href?: string;
+  linkLabel?: string;
+}
+const { label, title, lead, href, linkLabel } = Astro.props;
+---
+
+<header class="section__head">
+  <p class="section__label">{label}</p>
+  <div class="section__judul">
+    <h2 class="section__title">{title}</h2>
+    {
+      href && (
+        <a class="section__lebih" href={href}>
+          {linkLabel ?? 'Lihat selengkapnya'}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17 17 7M9 7h8v8" />
+          </svg>
+        </a>
+      )
+    }
+  </div>
+  {lead && <p class="section__lead">{lead}</p>}
+</header>
+
+<style>
+  .section__judul {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+  }
+  .section__lebih {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--accent-ink);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+  .section__lebih:hover {
+    border-bottom-color: currentColor;
+  }
+</style>

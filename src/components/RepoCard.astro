@@ -1,0 +1,183 @@
+---
+import type { Repo } from '../lib/data';
+import { relatif } from '../lib/data';
+import Icon from './Icon.astro';
+
+interface Props {
+  repo: Repo;
+  peran?: string;
+  hasil?: string;
+  showIndex?: boolean;
+  index?: number;
+}
+const { repo, peran, hasil, showIndex = false, index = 0 } = Astro.props;
+
+const bahasa = repo.language || (repo.topics[0] ?? 'Lainnya');
+---
+
+<article class="repo" data-bahasa={bahasa.toLowerCase()} data-topik={repo.topics.join(' ')}>
+  <header class="repo__head">
+    <span class="repo__ikon" aria-hidden="true"><Icon name="repo" size={15} /></span>
+    <h3 class="repo__nama">
+      <a href={repo.url} target="_blank" rel="noopener noreferrer">{repo.name}</a>
+    </h3>
+    {showIndex && <span class="repo__idx readout">{String(index + 1).padStart(2, '0')}</span>}
+  </header>
+
+  <p class="repo__desc">{repo.description || 'Tidak ada deskripsi.'}</p>
+
+  {hasil && <p class="repo__hasil"><span>Hasil</span>{hasil}</p>}
+
+  <footer class="repo__meta">
+    <span class="repo__dot" aria-hidden="true"></span>
+    <span class="readout">{bahasa}</span>
+    {
+      repo.stars > 0 && (
+        <span class="repo__stat readout">
+          <Icon name="star" size={13} />
+          {repo.stars}
+        </span>
+      )
+    }
+    <span class="repo__stat readout" title={`Diperbarui ${relatif(repo.updatedAt)}`}>
+      <Icon name="clock" size={13} />
+      {relatif(repo.updatedAt)}
+    </span>
+    {peran && <span class="repo__peran readout">{peran}</span>}
+    <a class="repo__buka" href={repo.url} target="_blank" rel="noopener noreferrer">
+      Buka
+      <Icon name="arrow" size={14} />
+    </a>
+  </footer>
+</article>
+
+<style>
+  .repo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.15rem 1.2rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line-strong);
+    border-radius: var(--radius);
+    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .repo:hover {
+    border-left-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .repo__head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+  .repo__ikon {
+    display: grid;
+    place-items: center;
+    color: var(--muted-2);
+    flex: none;
+  }
+  .repo__nama {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .repo__nama a {
+    display: inline-block;
+    padding-block: 3px;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+  .repo__nama a:hover {
+    border-bottom-color: currentColor;
+  }
+  .repo:hover .repo__nama {
+    color: var(--accent-ink);
+  }
+  .repo__idx {
+    margin-left: auto;
+    color: var(--muted-2);
+    flex: none;
+  }
+
+  .repo__desc {
+    color: var(--muted);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .repo__hasil {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: baseline;
+    font-size: var(--text-sm);
+    color: var(--text);
+    padding-top: 0.65rem;
+    border-top: 1px dashed var(--line);
+  }
+  .repo__hasil span {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    flex: none;
+  }
+
+  .repo__meta {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: flex-end;
+    gap: 0.5rem 0.85rem;
+    min-height: 3rem;
+    color: var(--muted-2);
+    font-size: var(--text-xs);
+    padding-top: 0.2rem;
+    z-index: 1;
+  }
+  .repo__stat,
+  .repo__peran {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .repo__peran {
+    color: var(--accent-ink);
+  }
+  .repo__buka {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-block: 5px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    pointer-events: auto;
+  }
+  .repo__buka:hover {
+    color: var(--accent-ink);
+  }
+
+  .repo__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: conic-gradient(from 45deg, var(--accent), var(--live), var(--muted), var(--accent));
+    flex: none;
+  }
+</style>

@@ -1,0 +1,57 @@
+{
+  "fetchedAt": 1790348653640,
+  "user": {
+    "login": "heritechlab",
+    "name": "Heri TechLab",
+    "avatar": "https://avatars.githubusercontent.com/u/273884699?v=4",
+    "url": "https://github.com/heritechlab",
+    "bio": "Pemula Vibes Coding",
+    "followers": 6,
+    "publicRepos": 3,
+    "hireable": true
+  },
+  "repos": [
+    {
+      "name": "spmi-basok",
+      "fullName": "heritechlab/spmi-basok",
+      "description": "program spmi lpm basok",
+      "url": "https://github.com/heritechlab/spmi-basok",
+      "homepage": "",
+      "language": "PHP",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-09-18T08:06:47Z",
+      "createdAt": "2026-09-17T22:06:37Z",
+      "private": false
+    },
+    {
+      "name": "hostidmurah-web",
+      "fullName": "heritechlab/hostidmurah-web",
+      "description": "Frontend utama HostID Murah — Next.js 14 App Router + shadcn/ui",
+      "url": "https://github.com/heritechlab/hostidmurah-web",
+      "homepage": "",
+      "language": "TypeScript",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-09-15T07:01:20Z",
+      "createdAt": "2026-04-09T16:33:04Z",
+      "private": false
+    },
+    {
+      "name": "monitor-plts-via-modbus",
+      "fullName": "heritechlab/monitor-plts-via-modbus",
+      "description": "Local-first monitoring dashboard and Modbus gateway for home PLTS",
+      "url": "https://github.com/heritechlab/monitor-plts-via-modbus",
+      "homepage": "",
+      "language": "Python",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-09-03T22:41:47Z",
+      "createdAt": "2026-08-02T14:20:46Z",
+      "private": false
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  url: string;
+  nama: string;
+  handle: string;
+  subscriberCount?: string | null;
+  videoCount?: number;
+  stale?: boolean;
+}
+const { url, nama, handle, subscriberCount, videoCount, stale } = Astro.props;
+
+const subs =
+  subscriberCount != null
+    ? new Intl.NumberFormat('id-ID').format(Number(subscriberCount))
+    : null;
+---
+
+<div class="chan">
+  <span class="chan__avatar" aria-hidden="true">
+    <Icon name="youtube" size={26} />
+  </span>
+
+  <div class="chan__info">
+    <p class="chan__nama">{nama}</p>
+    <p class="chan__meta readout">
+      {handle}
+      {subs && <span class="chan__dot">·</span>}
+      {subs && <span>{subs} subscriber</span>}
+      {videoCount ? <span class="chan__dot">·</span> : null}
+      {videoCount ? <span>{videoCount} video di feed</span> : null}
+    </p>
+  </div>
+
+  <div class="chan__aksi">
+    {stale && <span class="chan__stale readout" title="Data diambil dari cache terakhir">cache</span>}
+    <a class="btn btn--primary" href={url} target="_blank" rel="noopener noreferrer me">
+      <Icon name="youtube" size={16} />
+      Subscribe
+    </a>
+  </div>
+</div>
+
+<style>
+  .chan {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.9rem 1.1rem;
+    padding: 1rem 1.15rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+  }
+
+  .chan__avatar {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--panel);
+    color: var(--accent);
+  }
+
+  .chan__info {
+    min-width: 0;
+    flex: 1;
+    line-height: 1.3;
+  }
+  .chan__nama {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-lg);
+    letter-spacing: -0.015em;
+  }
+  .chan__meta {
+    color: var(--muted);
+    font-size: var(--text-xs);
+    letter-spacing: 0.05em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+  }
+  .chan__dot {
+    color: var(--line-strong);
+  }
+
+  .chan__aksi {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-left: auto;
+  }
+  .chan__stale {
+    padding: 0.15rem 0.5rem;
+    border: 1px dashed var(--line-strong);
+    border-radius: 999px;
+    color: var(--muted-2);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+  }
+</style>

@@ -1,0 +1,108 @@
+---
+import { profile } from '../lib/content';
+
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<ul class:list={['skills', compact && 'skills--compact']}>
+  {
+    profile.keahlian.map((k) => (
+      <li class="skill">
+        <div class="skill__head">
+          <h3 class="skill__grup">{k.grup}</h3>
+        </div>
+        <p class="skill__ringkas">{k.ringkas}</p>
+        <ul class="skill__item">
+          {k.item.map((i) => (
+            <li>
+              <span class="skill__tick" aria-hidden="true" />
+              {i}
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .skills {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  @media (min-width: 40rem) {
+    .skills {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .skills {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .skill {
+    background: var(--surface);
+    padding: 1.25rem 1.3rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: background-color 0.18s ease;
+  }
+  .skill:hover {
+    background: var(--accent-wash);
+  }
+
+  .skill__grup {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .skill__ringkas {
+    color: var(--muted);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+  }
+
+  .skill__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    list-style: none;
+    margin: auto 0 0;
+    padding: 0.75rem 0 0;
+    border-top: 1px dashed var(--line);
+  }
+  .skill__item li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    font-size: var(--text-sm);
+    color: var(--text);
+  }
+  .skill__tick {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  .skills--compact .skill__item {
+    display: none;
+  }
+  .skills--compact .skill {
+    padding-bottom: 1.25rem;
+  }
+</style>

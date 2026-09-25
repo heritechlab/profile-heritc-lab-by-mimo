@@ -1,0 +1,64 @@
+# =====================================================================
+# Profil utama — ubah di sini, bukan di dalam komponen.
+# =====================================================================
+
+nama: "Heri Saputra, S.Kom"
+namaSosial: "Heri Tc Lab"
+posisi: "Lead Dev · Network & Server · PLTS · Web"
+tagline: "Satu orang untuk jaringan, server, PLTS, dan web — dari rak panel sampai rilis produksi."
+
+bio: >-
+  Saya Heri Saputra, dikenal di kanal YouTube dan media sosial sebagai Heri Tc Lab.
+  Sehari-hari saya merawat infrastruktur kampus, membangun aplikasi web, dan
+  mengulik sistem kelistrikan PLTS di rumah — termasuk monitoring inverter dan
+  panel surya lewat Modbus.
+
+bioLanjutan: >-
+  Latar saya mencakup jaringan & server, sistem elektrikal/PLTS, dan
+  pengembangan web — plus hobi otomotif yang ternyata selalu beririsan dengan
+  kelistrikan dan cahaya. Di kampus STIKES Harapan Ibu Jambi saya menangani situs
+  utama dan perpustakaan digital sebagai lead dev; di luar itu saya mengelola
+  proyek sendiri seperti platform UMKM dan layanan hosting.
+
+lokasi: "Jambi, Indonesia"
+zonaWaktu: "WIB (UTC+7)"
+bahasa: ["Indonesia", "Inggris (dasar)"]
+
+# Foto profil: taruh file di public/img/heri.jpg lalu ganti path di bawah.
+# Biarkan kosong ("") untuk memakai inisial monogram otomatis.
+foto: ""
+
+keahlian:
+  - grup: "Jaringan & Infrastruktur"
+    ringkas: "Desain, pemasangan, dan pemeliharaan jaringan kampus dan rumah."
+    item: ["Switching & VLAN", "Routing & firewall", "Wi-Fi & coverage", "Cloudflare Tunnel / DNS"]
+  - grup: "Server & Self-Hosting"
+    ringkas: "Menjalankan layanan di VPS, Proxmox, dan reverse proxy sendiri."
+    item: ["Nginx / Caddy", "Proxmox & LXC", "Docker", "Backup & monitoring"]
+  - grup: "Sistem Elektrikal & PLTS"
+    ringkas: "Instalasi dan monitoring pembangkit listrik tenaga surya skala rumah."
+    item: ["Inverter hybrid", "Panel surya & MPPT", "Modbus RTU/TCP", "Monitoring dashboard"]
+  - grup: "Pengembangan Web"
+    ringkas: "Dari situs institusi sampai aplikasi SaaS multi-tenant."
+    item: ["PHP & Laravel", "Next.js / React", "WordPress headless", "SEO & performa"]
+  - grup: "Audio-Visual & Live Streaming"
+    ringkas: "Setup siaran dan perekaman untuk kebutuhan kampus dan acara."
+    item: ["Switcher & encoder", "OBS / vMix", "Rting & distribusi"]
+  - grup: "Otomotif & Cahaya"
+    ringkas: "Modifikasi lampu dan kelistrikan kendaraan — konten utama di kanal."
+    item: ["BiLED & projie", "DRL & relay", "Instalasi & perapian kabel"]
+
+minat:
+  - "Otomotif & modifikasi lampu"
+  - "Jaringan"
+  - "Server & self-hosting"
+  - "PLTS & elektrikal"
+  - "Web & tooling"
+
+# Ditampilkan di bagian kontak.
+kontak:
+  email: ""            # [ISI] email tujuan Web3Forms
+  whatsapp: ""         # [ISI] nomor international, mis. 6281234567890
+  web3formsKey: ""     # [ISI] access key Web3Forms (dari .env: WEB3FORMS_KEY)
+  latitude: null       # opsional, untuk schema.org
+  longitude: null

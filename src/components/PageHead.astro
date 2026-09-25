@@ -1,0 +1,68 @@
+---
+interface Props {
+  label: string;
+  title: string;
+  lead?: string;
+}
+const { label, title, lead } = Astro.props;
+---
+
+<section class="phead">
+  <div class="phead__grid" aria-hidden="true"></div>
+  <div class="wrap phead__inner">
+    <p class="phead__label readout">{label}</p>
+    <h1 class="phead__title">{title}</h1>
+    {lead && <p class="phead__lead">{lead}</p>}
+  </div>
+</section>
+
+<style>
+  .phead {
+    position: relative;
+    isolation: isolate;
+    background: var(--ink);
+    color: var(--on-panel);
+    border-bottom: 1px solid var(--panel-line);
+    padding-block: clamp(2.25rem, 6vw, 4rem);
+    overflow: hidden;
+  }
+  .phead__grid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: linear-gradient(
+        to right,
+        rgb(255 255 255 / 0.035) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 90% at 20% 50%, #000 20%, transparent 75%);
+  }
+
+  .phead__label {
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: var(--text-xs);
+    padding-bottom: 0.9rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 3px solid var(--accent);
+    display: inline-block;
+  }
+
+  .phead__title {
+    font-size: clamp(2.1rem, 6vw, 3.75rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    max-width: 18ch;
+  }
+
+  .phead__lead {
+    margin-top: 1rem;
+    max-width: 58ch;
+    color: var(--on-panel-muted);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.6;
+  }
+</style>

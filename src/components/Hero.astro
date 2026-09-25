@@ -1,0 +1,316 @@
+---
+import { profile, social, websites } from '../lib/content';
+import Icon from './Icon.astro';
+import { relatif, formatTanggal } from '../lib/data';
+
+interface Props {
+  youtube: { videos: { title: string; url: string; published: string; short: boolean }[]; subscriberCount: string | null; url: string };
+  repos: { name: string; url: string; updatedAt: string }[];
+  compact?: boolean;
+}
+
+const { youtube, repos, compact = false } = Astro.props;
+
+const video = youtube.videos[0];
+const repo = [...repos].sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))[0];
+const aktif = websites.websites.filter((w) => w.status === 'aktif').length;
+
+const baris = [
+  { k: 'Video terbaru', v: video ? formatTanggal(video.published) : '—', sub: video?.title ?? 'Belum ada data' },
+  { k: 'Repo terakhir', v: repo ? relatif(repo.updatedAt) : '—', sub: repo?.name ?? 'Belum ada data' },
+  { k: 'Situs dikelola', v: `${aktif}/${websites.websites.length}`, sub: 'aktif' },
+  { k: 'Basis', v: 'UTC+7', sub: profile.lokasi },
+];
+
+const sosialUtama = social.sosial.filter((s) => s.url && s.utama);
+const waktu = new Intl.DateTimeFormat('id-ID', {
+  hour: '2-digit',
+  minute: '2-digit',
+  timeZone: 'Asia/Jakarta',
+}).format(new Date());
+---
+
+<section class:list={['hero', compact && 'hero--compact']} aria-labelledby="judul-utama">
+  <div class="hero__grid" aria-hidden="true"></div>
+  <div class="wrap hero__inner">
+    <div class="hero__lead">
+      <h1 id="judul-utama" class="hero__nama">
+        <span>Heri</span>
+        <span>Tc Lab</span>
+      </h1>
+
+      <div class="hero__rail" aria-hidden="true"></div>
+
+      <p class="hero__posisi readout">{profile.posisi}</p>
+      <p class="hero__tagline">{profile.tagline}</p>
+
+      <div class="hero__aksi">
+        <a class="btn btn--primary" href="/proyek">
+          Lihat Karya
+          <Icon name="arrow" size={16} />
+        </a>
+        <a class="btn btn--on-panel" href="/kontak">
+          <Icon name="mail" size={16} />
+          Hubungi Saya
+        </a>
+      </div>
+
+      <ul class="hero__sosial" aria-label="Kanal utama">
+        {
+          sosialUtama.map((s) => (
+            <li>
+              <a href={s.url} target="_blank" rel="noopener noreferrer me">
+                <Icon name={s.platform} size={17} />
+                <span>{s.nama}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <aside class="panel" aria-label="Status kanal terakhir">
+      <header class="panel__bar">
+        <span class="panel__led" aria-hidden="true"></span>
+        <span class="readout">STATUS KANAL</span>
+        <span class="readout panel__jam">{waktu} WIB</span>
+      </header>
+
+      <dl class="panel__isi">
+        {
+          baris.map((b) => (
+            <div class="panel__baris">
+              <dt class="readout">{b.k}</dt>
+              <dd>
+                <span class="panel__nilai readout">{b.v}</span>
+                <span class="panel__sub">{b.sub}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      {
+        video && (
+          <a class="panel__video" href={video.url} target="_blank" rel="noopener noreferrer">
+            <Icon name="play" size={14} />
+            <span>{video.short ? 'Short terbaru' : 'Tonton video terbaru'}</span>
+            <Icon name="arrow" size={14} class="panel__panah" />
+          </a>
+        )
+      }
+    </aside>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    background: var(--ink);
+    color: var(--on-panel);
+    border-bottom: 1px solid var(--panel-line);
+    padding-block: clamp(3rem, 9vw, 6rem) clamp(3rem, 8vw, 5.5rem);
+    overflow: hidden;
+  }
+
+  /* muka panel: kisi halus, bukan gradasi */
+  .hero__grid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: linear-gradient(
+        to right,
+        rgb(255 255 255 / 0.035) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 90% 70% at 30% 40%, #000 30%, transparent 78%);
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+    align-items: end;
+  }
+  @media (min-width: 62rem) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(19rem, 23rem);
+    }
+  }
+
+  .hero__nama {
+    font-size: var(--text-display);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.86;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero__nama span:last-child {
+    color: var(--accent);
+  }
+
+  .hero__rail {
+    height: 3px;
+    width: min(100%, 22rem);
+    background: linear-gradient(to right, var(--accent), rgb(242 162 12 / 0.15));
+    margin-block: clamp(1rem, 2.5vw, 1.5rem) 1.1rem;
+  }
+
+  .hero__posisi {
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+  }
+
+  .hero__tagline {
+    margin-top: 0.75rem;
+    max-width: 34ch;
+    font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--on-panel-muted);
+  }
+
+  .hero__aksi {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: clamp(1.5rem, 3vw, 2.1rem);
+  }
+
+  .hero__sosial {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: clamp(1.75rem, 4vw, 2.5rem) 0 0;
+    padding: 0;
+  }
+  .hero__sosial a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--panel-line);
+    border-radius: 999px;
+    color: var(--on-panel-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+  }
+  .hero__sosial a:hover {
+    color: var(--on-panel);
+    border-color: var(--accent);
+    background: rgb(242 162 12 / 0.08);
+  }
+
+  /* ------------------------------------------------ panel status */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .panel__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--panel-line);
+    background: var(--panel-2);
+    color: var(--on-panel-muted);
+    letter-spacing: 0.1em;
+  }
+  .panel__led {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--live);
+    box-shadow: 0 0 0 3px rgb(62 167 118 / 0.18);
+    flex: none;
+  }
+  .panel__jam {
+    margin-left: auto;
+    color: var(--accent);
+  }
+
+  .panel__isi {
+    margin: 0;
+    padding: 0.35rem 0.9rem 0.5rem;
+  }
+  .panel__baris {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding-block: 0.7rem;
+    border-bottom: 1px dashed var(--panel-line);
+  }
+  .panel__baris:last-child {
+    border-bottom: 0;
+  }
+  .panel__baris dt {
+    color: var(--on-panel-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+  }
+  .panel__baris dd {
+    margin: 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .panel__nilai {
+    color: var(--accent);
+    font-size: var(--text-sm);
+  }
+  .panel__sub {
+    color: var(--on-panel-muted);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .panel__video {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    background: var(--accent);
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--text-sm);
+  }
+  .panel__video span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .panel__panah {
+    margin-left: auto;
+    transition: transform 0.15s ease;
+  }
+  .panel__video:hover .panel__panah {
+    transform: translate(2px, -2px);
+  }
+
+  .hero--compact {
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+  .hero--compact .hero__nama {
+    font-size: clamp(2.2rem, 6vw, 3.75rem);
+  }
+</style>

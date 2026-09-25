@@ -1,0 +1,44 @@
+# =====================================================================
+# Website yang dikelola (F-03) — tambah/hapus baris tanpa ubah kode.
+# status: aktif | dalam-ujicoba | arsip
+# peran  : lead-dev | owner | kolaborator | admin
+# stack  : bebas, tampil sebagai chip.
+# screenshot: path relatif di public/, kosongkan bila belum ada.
+# =====================================================================
+
+websites:
+  - nama: "STIKES Harapan Ibu Jambi"
+    url: "https://www.stikes-hi.ac.id"
+    deskripsi: "Situs utama kampus — profil program studi, pendaftaran, dan berita."
+    peran: "Lead Dev"
+    tanggungJawab: "Pengembangan, pemeliharaan, dan rilis fitur baru."
+    stack: ["Cloudflare", "CMS", "SEO"]
+    status: aktif
+    screenshot: ""
+
+  - nama: "Perpustakaan STIKES HI"
+    url: "https://perpus.stikes-hi.ac.id"
+    deskripsi: "Website dan katalog koleksi perpustakaan kampus."
+    peran: "Lead Dev"
+    tanggungJawab: "Katalog, pencarian koleksi, dan integrasi akun peminjaman."
+    stack: ["Cloudflare", "Katalog", "Auth"]
+    status: aktif
+    screenshot: ""
+
+  - nama: "udigi.id"
+    url: "https://www.udigi.id"
+    deskripsi: "Platform SaaS multi-subdomain untuk UMKM — bengkel, warung, kuliner dalam satu ekosistem."
+    peran: "Owner Projek"
+    tanggungJawab: "Arsitektur, pengembangan, dan pengelolaan produk."
+    stack: ["Next.js", "Multi-tenant", "SaaS"]
+    status: aktif
+    screenshot: ""
+
+  - nama: "Host ID Murah"
+    url: "https://www.hostidmurah.web.id"
+    deskripsi: "Layanan VPS, hosting, domain, email, dan SSL dalam satu dashboard."
+    peran: "Owner Projek"
+    tanggungJawab: "Frontend, billing flow, dan infrastruktur layanan."
+    stack: ["Next.js", "shadcn/ui", "VPS"]
+    status: aktif
+    screenshot: ""
